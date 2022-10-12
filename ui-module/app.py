@@ -3,6 +3,8 @@ import requests
 from config import inf_api_key
 
 app = Flask(__name__)
+app.secret_key = 'ajwioefaijwoefa'
+app.config['SESSION_TYPE'] = 'filesystem'
 
 def call_api(input_value):
     url = 'https://p1r4dch4la.execute-api.us-east-1.amazonaws.com/prod'
@@ -35,9 +37,6 @@ def search():
     return render_template("index.html")
 
 if __name__ == "__main__":
-    app.secret_key = 'ajwioefaijwoefa'
-    app.config['SESSION_TYPE'] = 'filesystem'
-
     #sess.init_app(app)
 
     app.debug = True
