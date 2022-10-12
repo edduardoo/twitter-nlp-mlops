@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <head>
+            <meta charset="UTF-8">
+            <title>Hi Twitter!</title>
+        </head>
+    </head>
+    <body>
+        <h1>Welcome to Twitter Sentiment Analyzer!</h1>
+        <br>
+        <form action="" method="post">
+            <p>Enter your value: 
+                <input type="text" name="name_input">
+                <input type="submit" value="ANALYZE!" id="analyze">            
+            </p>
+        </form>
+        <br>
+        {% for message in get_flashed_messages()%}
+                <p>{{message}}</p>
+        {% endfor %}
+    </body>
+</html>
