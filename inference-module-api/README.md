@@ -5,4 +5,4 @@
 curl --request POST \
   --url http://localhost:9000/2015-03-31/functions/function/invocations \
   --header 'Content-Type: application/json' \
-  --data '{"Input": 4}'
+  --data '{"texts": [""]}'

@@ -1,62 +1,53 @@
 import json
-import boto3
-import numpy as np
-from sklearn.linear_model import LinearRegression
 import numpy as np
 from joblib import dump, load
 import json
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+import configparser
+import keras
 
+# loading model, tokenizer and configs
+config = configparser.ConfigParser()
+config.sections()
+config.read('./config.ini')
+
+max_len = int(config['model_params']['max_len'])
+max_words = int(config['model_params']['max_words'])
+sentiment = np.array(['Neutral','Negative','Positive'])
+
+model = keras.models.load_model("./BidLTSM.hdf5")
+tokenizer = load('./keras_tokenizer.joblib')
 
 def handler(event, context):
-    #body = event["body"]
-    #if type(body) == str: # locally is a dict but on API Gateway is a string
-     #   body = json.loads(body)
 
     print("EVENT PARAMS: {}".format(event))
     print("EVENT TYPE: {}".format(type(event)))
-    inp = event["Input"]
-    if type(inp) == str: # locally is a dict but on API Gateway is a string
-        inp = json.loads(inp)
+    new_data = event["texts"]
+    if type(new_data) == str: # locally is a dict but on API Gateway is a string
+        new_data = json.loads(new_data)
 
-    #new_data = np.array(body["Input"]).reshape((-1, 1))
-    new_data = np.array(inp).reshape((-1, 1))
-
-    # loading model
-    model = load('./reg_model.joblib') # at run time, the model is in the same folder as the handler in the container
-    
     # predicting
-    pred = model.predict(new_data)
+    predictions = predict(new_data)
 
     # preparing response json
-    response = {'predictions': list(pred.reshape(-1))}
-    response = json.dumps(response)
+    response = {'predictions': list(predictions)}
+    #response = json.dumps(response)
 
     return {
         'statusCode': 200,
         'body': response
     }
 
+def predict(new_data):
+    sequence = tokenizer.texts_to_sequences(new_data)
+    padded = pad_sequences(sequence, maxlen=max_len)
+    predictions = sentiment[np.around(model.predict(padded), decimals=0).argmax(axis=1)]
+    return predictions
 
+
+# TODO: implement continuous training
 def train():
-    # mock data
-    X_train = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).reshape((-1, 1))
-    y_train = np.array([11, 12, 13, 14, 15, 16, 17, 18, 19, 20]).reshape((-1, 1))
-
-    # training model
-    model = LinearRegression()
-    model.fit(X_train, y_train)
-    model.score(X_train, y_train)
-
-    # persisting model
-    dump(model, './models/reg_model.joblib')
-
-    # loading model
-    model_pers = load('./models/reg_model.joblib') 
-
-    # testing model
-    new_data = np.array([7, 28]).reshape((-1, 1))
-    print("Prediction for {} ===>>> {}".format(list(new_data), list(model_pers.predict(new_data))))
+    pass
 
 
 # the model is trained locally, by runing "python handler.py"
