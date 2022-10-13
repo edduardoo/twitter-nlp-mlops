@@ -5,6 +5,7 @@ from sklearn.linear_model import LinearRegression
 import numpy as np
 from joblib import dump, load
 import json
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 
 def handler(event, context):
