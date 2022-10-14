@@ -1,5 +1,15 @@
 import pandas as pd
 
+def search_for_tweets(keyword, bearer_token):
+    client = tweepy.Client(bearer_token=bearer_token)
+    # search query
+    query = '"{}" -is:retweet lang:en'.format(keyword)
+
+    tweets = client.search_recent_tweets(query=query, tweet_fields=['created_at', 'public_metrics'], 
+                                     sort_order='relevancy', user_fields=['profile_image_url'], 
+                                     expansions='author_id', max_results=10)
+    return tweets
+
 def tweets_to_df(tweets, type="tweepy"): # during tests I used a hardcoded set of tweets, so I change 'type' to anything else
     results = pd.DataFrame()
     for tweet in tweets:
