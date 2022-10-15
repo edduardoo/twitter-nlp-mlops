@@ -1,6 +1,6 @@
 <div class="text-center"><h3 class="display-7 fw-bold">Results:</h3></div>
     
-<div class="px-1 py-1 my-4 text-center">
+<div class="px-1 py-1 my-4 text-center sent_counts">
     <span class="badge text-bg-secondary">Neutral: {{ counts['Neutral'] }}</span>
     <span class="badge text-bg-success">Positive: {{ counts['Positive'] }}</span>
     <span class="badge text-bg-danger">Negative: {{ counts['Negative'] }}</span>
@@ -8,17 +8,17 @@
   
   
 <!--Layout do card grids: https://codepen.io/JacobLett/pen/yLLdvjV  -->   
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-3">
+<div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3">
     
     {% for idx, row in tweets_df.iterrows() %}
         
     <div class="col mb-4 d-flex align-items-stretch">
         {% if row["sentiment"] == "Positive" %}
-            <div class='card text-bg-success'>    
+            <div class='card text-bg-success w-100'>    
         {% elif row["sentiment"] == "Negative" %}
-            <div class='card text-bg-danger'>    
+            <div class='card text-bg-danger w-100'>    
         {% else %}
-            <div class='card text-bg-secondary'>    
+            <div class='card text-bg-secondary w-100'>    
         {% endif %}
         
         <div class="card-body d-flex flex-column">
@@ -27,11 +27,11 @@
                 <h6 class="card-subtitle mb-2">{{ row['date'] }}</h6>
             </div>
             <div class="row"><p class="card-text">{{ row['text'] }}</p></div>                
-            <div class="row mt-auto">
+            <div class="row mt-auto pt-3">
                 <div class="col-5 like">{{ row['likes'] }} Likes</div>
                 <div class="col-2"></div>
-                <div class="col-5">
-                    <a href="https://t.co/S8bZsxoPx6" class="link-dark">See on Twitter</a>
+                <div class="col-5 text-end">
+                    <a href="{{ row['url'] }}" class="link-dark" target="_blank">See on Twitter</a>
                 </div>
             </div>
         </div>

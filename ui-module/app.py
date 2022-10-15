@@ -37,13 +37,13 @@ def search():
     predictions = call_api(list(tweets_df['text']))
     tweets_df['sentiment'] = predictions['body']['predictions']
 
-    tweets_df = tweets_df[['sentiment', 'text', 'likes', 'date']]
+    tweets_df = tweets_df[['url', 'sentiment', 'text', 'likes', 'date']]
     counts_dict = tweets_df.value_counts('sentiment').to_dict()
     for sentiment in ('Neutral', 'Negative', 'Positive'):
         if sentiment not in counts_dict:            
             counts_dict[sentiment] = 0    
     print(counts_dict)
-    print(tweets_df.head())    
+    print(tweets_df.head())
     return render_template("results.html", tweets_df=tweets_df, counts=counts_dict)
         
 

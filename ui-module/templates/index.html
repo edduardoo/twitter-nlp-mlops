@@ -19,13 +19,16 @@
     <div class="col-lg-6 mx-auto">
       <p class="lead mb-4">Give it a try and start analyzing sentiment about any term on Twitter right now!</p>
       
-      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-        
-        <div class="input-group">
-            <span class="input-group-text">Enter a search term: </span>
-            <input type="text" id="search_term" class="form-control" aria-label="Search Term" placeholder="e.g. Joe Biden, Microsoft, Taylor Swift...">
-          </div>
-        <input type="button" id="btn_search" class="btn btn-outline-primary" value="Search" onclick="searchTweetsByTerm();"/>
+      <!--<div class="d-grid gap-2 d-sm-flex justify-content-sm-center"> -->
+        <div>
+        <form id="search_form">
+            <div class="input-group">
+                <span class="input-group-text">Enter a search term: </span>
+                <input type="text" id="search_term" class="form-control" aria-label="Search Term" placeholder="e.g. Joe Biden, Microsoft, Taylor Swift...">                
+                <button type="submit" id="btn_search" class="btn btn-outline-primary">Search</button>
+                <div class="invalid-feedback mv-up">Please, enter at least 5 letters to search for a term.</div>
+            </div>            
+        </form>
     
       </div>
     
@@ -36,7 +39,12 @@
     <img src="../static/assets/loading.gif" width="80" height="80">
     <div class="text-center px-2 py-3 my-2"><h4 class="display-11 fw-bold">Searching on Twitter and classifying the sentiments...</h4></div>
   </div>
-  
+
+  <div class="container text-center" id="error" style="display: none;">
+    <img src="../static/assets/error.png" width="80" height="80">
+    <div class="text-center px-2 py-3 my-2"><h4 class="display-11 fw-bold">Sorry! There was some error!</h4></div>
+  </div>
+
   <div class="container" id="results"></div>
     
 </body>
