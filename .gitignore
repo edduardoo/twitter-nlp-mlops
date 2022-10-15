@@ -1,2 +1,4 @@
 *config.py
-*Compare*Models.ipynb
+*Compare*Models*.ipynb
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
