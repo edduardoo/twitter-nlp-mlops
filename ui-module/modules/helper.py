@@ -1,4 +1,5 @@
 import pandas as pd
+import tweepy
 
 def search_for_tweets(keyword, bearer_token):
     client = tweepy.Client(bearer_token=bearer_token)
@@ -23,8 +24,12 @@ def tweets_to_df(tweets, type="tweepy"): # during tests I used a hardcoded set o
         df[list(keys)] = [list(values)]
         results = pd.concat([results, df])
 
-        results['created_at'] = pd.to_datetime(results['created_at'])
-        results.reset_index(drop=True, inplace=True)
-        # reordering columns:
-        results = results[['id', 'created_at', 'author_id', 'text', 'retweet_count', 'reply_count', 'like_count', 'quote_count']]
+    results['created_at'] = pd.to_datetime(results['created_at'])
+    results.reset_index(drop=True, inplace=True)
+    # formatting likes
+    results['likes'] = results['like_count'].apply(lambda x: "{:,}".format(x))
+    # formatting date
+    results['date'] = results['created_at'].dt.strftime('%m/%d/%Y %I:%M %p')    
+    # reordering columns:
+    results = results[['id', 'date', 'author_id', 'text', 'retweet_count', 'reply_count', 'likes', 'quote_count']]
     return results

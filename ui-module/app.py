@@ -24,21 +24,28 @@ def call_api(texts):
 
 
 @app.route('/', methods=["GET"])
-def twitter():
-    flash("what's your name dude?")
+def home():
+    print("Getizao")
     return render_template("index.html")
 
-@app.route('/', methods=["POST"])
+@app.route('/search', methods=["POST"])
 def search():    
-    search_term = request.form['name_input']
+    search_term =  request.get_json()['search_term']    
     tweets = hp.search_for_tweets(search_term, twitter_api_token)
-    tweets_df = hp.tweets_to_df(tweets.data)
+    tweets_df = hp.tweets_to_df(tweets.data)    
 
     predictions = call_api(list(tweets_df['text']))
     tweets_df['sentiment'] = predictions['body']['predictions']
-    tweets_df = tweets_df[['sentiment', 'text', 'like_count']]
 
-    return render_template("results.html", df=tweets_df)
+    tweets_df = tweets_df[['sentiment', 'text', 'likes', 'date']]
+    counts_dict = tweets_df.value_counts('sentiment').to_dict()
+    for sentiment in ('Neutral', 'Negative', 'Positive'):
+        if sentiment not in counts_dict:            
+            counts_dict[sentiment] = 0    
+    print(counts_dict)
+    print(tweets_df.head())    
+    return render_template("results.html", tweets_df=tweets_df, counts=counts_dict)
+        
 
 if __name__ == "__main__":
     app.run(debug=True)
