@@ -8,5 +8,7 @@ COPY handler.py ${LAMBDA_TASK_ROOT}
 COPY ./models/* ${LAMBDA_TASK_ROOT}
 COPY ./artifacts/* ${LAMBDA_TASK_ROOT}
 COPY config.ini ${LAMBDA_TASK_ROOT}
+COPY helper.py ${LAMBDA_TASK_ROOT}
+COPY stopwords.txt ${LAMBDA_TASK_ROOT}
 
 CMD [ "handler.handler" ]
